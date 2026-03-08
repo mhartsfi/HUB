@@ -693,9 +693,222 @@
   }
 
   .github-banner strong { color: var(--accent3); }
+
+  /* ── PASSWORD SCREEN ── */
+  #lockScreen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  #lockScreen::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(232,255,71,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(71,200,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .lock-box {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .lock-icon {
+    font-size: 48px;
+    margin-bottom: 24px;
+    display: block;
+    animation: lockFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes lockFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .lock-title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+  }
+
+  .lock-title span { color: var(--accent); }
+
+  .lock-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  .lock-input-wrap {
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  #lockInput {
+    width: 100%;
+    padding: 16px 56px 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    letter-spacing: 4px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #lockInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,255,71,0.08);
+  }
+
+  #lockInput.shake {
+    animation: shake 0.4s ease;
+    border-color: var(--accent2) !important;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+
+  .lock-error {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent2);
+    height: 16px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s;
+  }
+
+  #unlockBtn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: var(--accent);
+    color: #0a0a0c;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  #unlockBtn:hover { background: #d4eb3a; transform: translateY(-1px); }
+  #unlockBtn:active { transform: translateY(0); }
+
+  .lock-hint {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .lock-change-wrap {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .lock-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+
+  .lock-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.15s;
+  }
+
+  .lock-dot.filled { background: var(--accent); }
+
+  /* ── CHANGE PASSWORD MODAL ── */
+  #changePwModal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  #changePwModal.open { display: flex; }
 </style>
 </head>
 <body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-box">
+    <span class="lock-icon">🔐</span>
+    <div class="lock-title">STUDIO <span>HUB</span></div>
+    <div class="lock-sub">Creative Command Center<br>Enter your studio password to continue.</div>
+    <div class="lock-dots" id="lockDots">
+      <div class="lock-dot" id="d0"></div>
+      <div class="lock-dot" id="d1"></div>
+      <div class="lock-dot" id="d2"></div>
+      <div class="lock-dot" id="d3"></div>
+    </div>
+    <div class="lock-input-wrap">
+      <input type="password" id="lockInput" placeholder="••••••••" maxlength="32"
+        oninput="onLockType()" onkeydown="if(event.key==='Enter')tryUnlock()">
+    </div>
+    <div class="lock-error" id="lockError"></div>
+    <button id="unlockBtn" onclick="tryUnlock()">ENTER STUDIO →</button>
+    <div class="lock-hint" id="lockHint"></div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changePwModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-title">Change Password</div>
+    <div class="form-group">
+      <label>Current Password</label>
+      <input type="password" id="pw-current" placeholder="Current password">
+    </div>
+    <div class="form-group">
+      <label>New Password</label>
+      <input type="password" id="pw-new" placeholder="New password">
+    </div>
+    <div class="form-group">
+      <label>Confirm New Password</label>
+      <input type="password" id="pw-confirm" placeholder="Confirm new password">
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px" id="pwChangeMsg"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('changePwModal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- HEADER -->
 <header>
@@ -706,6 +919,7 @@
   <div style="display:flex;align-items:center;gap:16px">
     <div class="header-date" id="headerDate"></div>
     <button class="btn btn-primary" onclick="exportHub()" style="font-size:12px;padding:7px 16px">⬇ Export HTML</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('changePwModal').classList.add('open')" style="font-size:12px;padding:7px 16px">🔑 Password</button>
   </div>
 </header>
 
@@ -1609,11 +1823,10 @@ function disciplineEmoji(d) {
 
 // ══ EXPORT ══
 function exportHub() {
-  // Grab the full HTML source of this page
   const source = document.documentElement.outerHTML;
 
-  // Find the seedDefaults function and replace it so the exported file
-  // opens with the current state baked in as defaults
+  const currentPw = getPassword();
+
   const dataScript = `
   // ══ BAKED-IN DATA (exported ${new Date().toLocaleString()}) ══
   function seedDefaults() {
@@ -1622,13 +1835,18 @@ function exportHub() {
     save();
   }`;
 
-  // Replace the seedDefaults block in the exported source
-  const exportedSource = source.replace(
+  let exportedSource = source.replace(
     /\/\/ ══ BAKED-IN DATA[\s\S]*?function seedDefaults\(\) \{[\s\S]*?\n  \}/,
     dataScript
   ).replace(
     /function seedDefaults\(\) \{[\s\S]*?\n  save\(\);\n\}/,
     dataScript
+  );
+
+  // Bake current password into exported file
+  exportedSource = exportedSource.replace(
+    /const DEFAULT_PW = '.*?';/,
+    `const DEFAULT_PW = '${currentPw}';`
   );
 
   const blob = new Blob([exportedSource], { type: 'text/html' });
@@ -1641,6 +1859,92 @@ function exportHub() {
   render();
 }
 
+// ══ PASSWORD ══
+const DEFAULT_PW = 'studio2025';
+const PW_KEY = 'studioHub_pw';
+const SESSION_KEY = 'studioHub_session';
+
+function getPassword() {
+  return localStorage.getItem(PW_KEY) || DEFAULT_PW;
+}
+
+function isUnlocked() {
+  return sessionStorage.getItem(SESSION_KEY) === 'unlocked';
+}
+
+function onLockType() {
+  const val = document.getElementById('lockInput').value;
+  // Update dots (show up to 4 filled dots as visual feedback)
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('d' + i).classList.toggle('filled', i < Math.min(val.length, 4));
+  }
+  document.getElementById('lockError').textContent = '';
+}
+
+function tryUnlock() {
+  const input = document.getElementById('lockInput').value;
+  const correct = getPassword();
+  if (input === correct) {
+    sessionStorage.setItem(SESSION_KEY, 'unlocked');
+    const ls = document.getElementById('lockScreen');
+    ls.style.transition = 'opacity 0.4s ease';
+    ls.style.opacity = '0';
+    setTimeout(() => ls.style.display = 'none', 400);
+  } else {
+    const inp = document.getElementById('lockInput');
+    inp.classList.add('shake');
+    inp.value = '';
+    for (let i = 0; i < 4; i++) document.getElementById('d' + i).classList.remove('filled');
+    document.getElementById('lockError').textContent = 'Incorrect password. Try again.';
+    setTimeout(() => inp.classList.remove('shake'), 400);
+    // Show hint after 2 failed attempts
+    const fails = parseInt(sessionStorage.getItem('pwFails') || '0') + 1;
+    sessionStorage.setItem('pwFails', fails);
+    if (fails >= 2) {
+      document.getElementById('lockHint').textContent = 'Default password: studio2025';
+    }
+  }
+}
+
+function changePassword() {
+  const current = document.getElementById('pw-current').value;
+  const newPw = document.getElementById('pw-new').value;
+  const confirm = document.getElementById('pw-confirm').value;
+  const msg = document.getElementById('pwChangeMsg');
+
+  if (current !== getPassword()) {
+    msg.style.color = 'var(--accent2)';
+    msg.textContent = '✗ Current password is incorrect.';
+    return;
+  }
+  if (newPw.length < 4) {
+    msg.style.color = 'var(--accent2)';
+    msg.textContent = '✗ New password must be at least 4 characters.';
+    return;
+  }
+  if (newPw !== confirm) {
+    msg.style.color = 'var(--accent2)';
+    msg.textContent = '✗ Passwords do not match.';
+    return;
+  }
+  localStorage.setItem(PW_KEY, newPw);
+  msg.style.color = 'var(--accent)';
+  msg.textContent = '✓ Password updated! It will be baked into your next export.';
+  addActivity('🔑', 'Studio password updated');
+  ['pw-current','pw-new','pw-confirm'].forEach(id => document.getElementById(id).value = '');
+  render();
+}
+
+function initLockScreen() {
+  if (isUnlocked()) {
+    document.getElementById('lockScreen').style.display = 'none';
+  }
+  // Show default hint on first visit
+  if (!localStorage.getItem(PW_KEY)) {
+    document.getElementById('lockHint').textContent = 'Default password: studio2025  —  change it inside the Hub';
+  }
+}
+
 // ══ HEADER DATE ══
 function updateDate() {
   const d = new Date();
@@ -1651,6 +1955,7 @@ function updateDate() {
 load();
 updateDate();
 render();
+initLockScreen();
 </script>
 </body>
 </html>
