@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STUDIO HUB — Creative Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --surface: #111115;
+    --panel: #16161c;
+    --border: #2a2a35;
+    --accent: #e8ff47;
+    --accent2: #ff4f7b;
+    --accent3: #47c8ff;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .logo-dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+  }
+
+  .header-date {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex; gap: 4px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none;
+    background: transparent;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .tab-btn:hover { color: var(--text); background: var(--surface); }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #0a0a0c;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── GRID HELPERS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #3a3a48; }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .card-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── DASHBOARD ── */
+  .dash-hero {
+    background: linear-gradient(135deg, #13131a 0%, #1a1a24 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dash-hero::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(232,255,71,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .dash-hero h1 {
+    font-family: var(--font-display);
+    font-size: 42px; font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .dash-hero h1 span { color: var(--accent); }
+
+  .dash-hero p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  .stat-row { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+
+  .stat-pill {
+    padding: 10px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .stat-pill strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* ── CHALLENGE CARD ── */
+  .challenge-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .challenge-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(232,255,71,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(232,255,71,0.25);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .challenge-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px;
+    border-radius: 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .challenge-item:hover { border-color: #3a3a48; transform: translateX(3px); }
+
+  .challenge-item.done { opacity: 0.45; }
+
+  .challenge-item.done .challenge-text { text-decoration: line-through; }
+
+  .challenge-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .challenge-text { font-size: 14px; line-height: 1.4; }
+
+  .challenge-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .challenge-check {
+    margin-left: auto;
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+
+  .challenge-item.done .challenge-check {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  /* ── PROJECTS ── */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .project-card.status-active::before { background: var(--accent); }
+  .project-card.status-review::before { background: var(--accent3); }
+  .project-card.status-hold::before { background: var(--accent2); }
+  .project-card.status-done::before { background: var(--muted); }
+
+  .project-card:hover { border-color: #3a3a48; transform: translateY(-2px); }
+
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--panel);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  .project-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .status-active { background: rgba(232,255,71,0.12); color: var(--accent); border: 1px solid rgba(232,255,71,0.2); }
+  .status-review { background: rgba(71,200,255,0.12); color: var(--accent3); border: 1px solid rgba(71,200,255,0.2); }
+  .status-hold { background: rgba(255,79,123,0.12); color: var(--accent2); border: 1px solid rgba(255,79,123,0.2); }
+  .status-done { background: rgba(107,107,128,0.12); color: var(--muted); border: 1px solid rgba(107,107,128,0.2); }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  select option { background: var(--panel); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0c;
+  }
+
+  .btn-primary:hover { background: #d4eb3a; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { color: var(--text); border-color: #3a3a48; }
+
+  .btn-danger {
+    background: rgba(255,79,123,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(255,79,123,0.25);
+  }
+
+  .btn-danger:hover { background: rgba(255,79,123,0.25); }
+
+  .btn-row { display: flex; gap: 10px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 26px; font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── TOOLS GRID ── */
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+
+  .tool-card:hover { border-color: #3a3a48; transform: translateY(-2px); }
+
+  .tool-emoji { font-size: 28px; }
+
+  .tool-name {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700;
+  }
+
+  .tool-category {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tool-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent3);
+    text-decoration: none;
+    margin-top: auto;
+  }
+
+  .tool-link:hover { text-decoration: underline; }
+
+  /* ── SCHEDULE / CALENDAR ── */
+  .schedule-day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .day-name {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .schedule-item {
+    padding: 8px 12px;
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .schedule-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  /* ── NOTES ── */
+  .note-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .note-card:hover { border-color: #3a3a48; }
+
+  .note-title {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .note-preview {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .note-date {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 24px;
+    letter-spacing: -0.3px;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* ── ACTIVITY FEED ── */
+  .activity-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    background: var(--panel);
+  }
+
+  .activity-text { font-size: 13px; line-height: 1.4; }
+  .activity-time { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* ── SKILL TRACKER ── */
+  .skill-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-row:last-child { border-bottom: none; }
+
+  .skill-name { font-size: 14px; font-weight: 500; min-width: 140px; }
+
+  .skill-bar { flex: 1; height: 6px; background: var(--panel); border-radius: 3px; overflow: hidden; }
+
+  .skill-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width 0.5s ease;
+  }
+
+  .skill-level {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    main { padding: 20px 16px; }
+    header { padding: 16px; }
+    .nav-tabs { padding: 12px 16px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .dash-hero h1 { font-size: 28px; }
+    .stat-row { gap: 8px; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── GITHUB BANNER ── */
+  .github-banner {
+    background: linear-gradient(90deg, rgba(71,200,255,0.06), transparent);
+    border: 1px solid rgba(71,200,255,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .github-banner strong { color: var(--accent3); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <span>STUDIO HUB</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="header-date" id="headerDate"></div>
+    <button class="btn btn-primary" onclick="exportHub()" style="font-size:12px;padding:7px 16px">⬇ Export HTML</button>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('dashboard')">🏠 Dashboard</button>
+  <button class="tab-btn" onclick="showTab('projects')">🎬 Projects</button>
+  <button class="tab-btn" onclick="showTab('challenges')">⚡ Daily Challenges</button>
+  <button class="tab-btn" onclick="showTab('schedule')">📅 Schedule</button>
+  <button class="tab-btn" onclick="showTab('skills')">📈 Skills</button>
+  <button class="tab-btn" onclick="showTab('tools')">🛠 Tools</button>
+  <button class="tab-btn" onclick="showTab('notes')">📝 Notes</button>
+</nav>
+
+<main>
+
+  <!-- ══ DASHBOARD ══ -->
+  <section id="tab-dashboard" class="section active">
+    <div class="dash-hero">
+      <h1>Welcome back,<br><span id="studioName">Creative Studio</span>.</h1>
+      <p>Your creative command center. Track projects, sharpen your skills, and crush daily challenges — all in one place.</p>
+      <div class="stat-row" id="statRow"></div>
+    </div>
+
+    <div class="github-banner">
+      <span>📦</span>
+      <span>Host this file on GitHub Pages for free team access → <strong>yourname.github.io/studio-hub</strong></span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--accent)"></span>Today's Challenges</div>
+        <div id="dashChallenges"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Active Projects</div>
+        <div id="dashProjects"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--accent2)"></span>Recent Activity</div>
+      <div id="activityFeed"></div>
+    </div>
+  </section>
+
+  <!-- ══ PROJECTS ══ -->
+  <section id="tab-projects" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Projects</div>
+        <div class="section-sub">Track everything from short films to game builds</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('projectModal')">+ New Project</button>
+    </div>
+
+    <div class="grid-3" id="projectsGrid"></div>
+  </section>
+
+  <!-- ══ DAILY CHALLENGES ══ -->
+  <section id="tab-challenges" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Daily Challenges</div>
+        <div class="section-sub">Skill-building exercises across all disciplines</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('challengeModal')">+ Add Challenge</button>
+    </div>
+
+    <div class="grid-2" id="challengesGrid"></div>
+  </section>
+
+  <!-- ══ SCHEDULE ══ -->
+  <section id="tab-schedule" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Weekly Schedule</div>
+        <div class="section-sub">Plan sessions, reviews, and deadlines</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button>
+    </div>
+    <div class="grid-3" id="scheduleGrid"></div>
+  </section>
+
+  <!-- ══ SKILLS ══ -->
+  <section id="tab-skills" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Skill Tracker</div>
+        <div class="section-sub">Rate your proficiency in studio tools & disciplines</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('skillModal')">+ Add Skill</button>
+    </div>
+    <div class="grid-2">
+      <div class="card" id="skillsCard">
+        <div class="card-title"><span class="dot" style="background:var(--accent)"></span>Tracked Skills</div>
+        <div id="skillsList"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Discipline Overview</div>
+        <div id="disciplineOverview"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TOOLS ══ -->
+  <section id="tab-tools" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Studio Toolkit</div>
+        <div class="section-sub">Free & open-source software for every discipline</div>
+      </div>
+    </div>
+    <div class="grid-4" id="toolsGrid"></div>
+  </section>
+
+  <!-- ══ NOTES ══ -->
+  <section id="tab-notes" class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Notes & Docs</div>
+        <div class="section-sub">Ideas, scripts, briefs, and references</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('noteModal')">+ New Note</button>
+    </div>
+    <div class="grid-3" id="notesGrid"></div>
+  </section>
+
+</main>
+
+<!-- ══ MODALS ══ -->
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <div class="modal-title">New Project</div>
+    <div class="form-group">
+      <label>Project Name</label>
+      <input type="text" id="proj-name" placeholder="e.g. Short Film — The Void">
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="proj-desc" placeholder="Brief description of the project..."></textarea>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Category</label>
+        <select id="proj-cat">
+          <option>Animation</option>
+          <option>Film / Video</option>
+          <option>Game Dev</option>
+          <option>Music Production</option>
+          <option>Motion Graphics</option>
+          <option>3D Art</option>
+          <option>Illustration</option>
+          <option>Sound Design</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="proj-status">
+          <option value="active">Active</option>
+          <option value="review">In Review</option>
+          <option value="hold">On Hold</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Progress (%)</label>
+        <input type="number" id="proj-progress" min="0" max="100" value="0">
+      </div>
+      <div class="form-group">
+        <label>Due Date</label>
+        <input type="date" id="proj-due">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Tools Used (comma-separated)</label>
+      <input type="text" id="proj-tools" placeholder="e.g. Blender, DaVinci Resolve, GIMP">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+      <button class="btn btn-ghost" onclick="closeModal('projectModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGE MODAL -->
+<div class="modal-overlay" id="challengeModal">
+  <div class="modal">
+    <div class="modal-title">Add Challenge</div>
+    <div class="form-group">
+      <label>Challenge Title</label>
+      <input type="text" id="ch-title" placeholder="e.g. Rig a character face in Blender">
+    </div>
+    <div class="form-group">
+      <label>Description / Instructions</label>
+      <textarea id="ch-desc" placeholder="Steps, tips, or reference links..."></textarea>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Discipline</label>
+        <select id="ch-disc">
+          <option>Animation</option>
+          <option>Film / Video</option>
+          <option>Game Dev</option>
+          <option>Music Production</option>
+          <option>3D Art</option>
+          <option>Illustration</option>
+          <option>Sound Design</option>
+          <option>Motion Graphics</option>
+          <option>Writing / Script</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Difficulty</label>
+        <select id="ch-diff">
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Tool / Software</label>
+      <input type="text" id="ch-tool" placeholder="e.g. Blender, Unreal, LMMS...">
+    </div>
+    <div class="form-group">
+      <label>Frequency</label>
+      <select id="ch-freq">
+        <option>Daily</option>
+        <option>Weekly</option>
+        <option>One-time</option>
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveChallenge()">Save Challenge</button>
+      <button class="btn btn-ghost" onclick="closeModal('challengeModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div class="modal-overlay" id="scheduleModal">
+  <div class="modal">
+    <div class="modal-title">Add Schedule Event</div>
+    <div class="form-group">
+      <label>Event Title</label>
+      <input type="text" id="sched-title" placeholder="e.g. Team Review — Episode 2 Cut">
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Day</label>
+        <select id="sched-day">
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+          <option>Sunday</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <input type="time" id="sched-time">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="sched-notes" placeholder="Additional context or agenda..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveScheduleEvent()">Save Event</button>
+      <button class="btn btn-ghost" onclick="closeModal('scheduleModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SKILL MODAL -->
+<div class="modal-overlay" id="skillModal">
+  <div class="modal">
+    <div class="modal-title">Add Skill</div>
+    <div class="form-group">
+      <label>Skill / Software Name</label>
+      <input type="text" id="sk-name" placeholder="e.g. Blender Rigging">
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Discipline</label>
+        <select id="sk-disc">
+          <option>3D / Animation</option>
+          <option>Film / Video</option>
+          <option>Game Dev</option>
+          <option>Music</option>
+          <option>Illustration</option>
+          <option>Motion Graphics</option>
+          <option>Sound Design</option>
+          <option>Writing</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Proficiency (0–100)</label>
+        <input type="number" id="sk-level" min="0" max="100" value="50">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveSkill()">Save Skill</button>
+      <button class="btn btn-ghost" onclick="closeModal('skillModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-title">New Note</div>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="note-title" placeholder="e.g. Script for Episode 3">
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select id="note-cat">
+        <option>Script / Story</option>
+        <option>Technical Notes</option>
+        <option>Reference</option>
+        <option>Meeting Notes</option>
+        <option>Ideas</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Content</label>
+      <textarea id="note-content" style="min-height:140px" placeholder="Write your note here..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
+      <button class="btn btn-ghost" onclick="closeModal('noteModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW NOTE MODAL -->
+<div class="modal-overlay" id="viewNoteModal">
+  <div class="modal">
+    <div class="modal-title" id="viewNoteTitle"></div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:16px" id="viewNoteMeta"></div>
+    <div style="font-size:14px;line-height:1.7;white-space:pre-wrap" id="viewNoteContent"></div>
+    <div style="margin-top:24px" class="btn-row">
+      <button class="btn btn-danger" id="deleteNoteBtn">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('viewNoteModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ STATE ══
+let state = {
+  studioName: 'Creative Studio',
+  projects: [],
+  challenges: [],
+  schedule: [],
+  skills: [],
+  notes: [],
+  activity: []
+};
+
+// ══ PERSISTENCE ══
+function save() {
+  localStorage.setItem('studioHub_v1', JSON.stringify(state));
+}
+
+function load() {
+  const d = localStorage.getItem('studioHub_v1');
+  if (d) {
+    try { state = JSON.parse(d); } catch(e) {}
+  } else {
+    seedDefaults();
+  }
+}
+
+function seedDefaults() {
+  state.studioName = 'Creative Studio';
+  state.challenges = [
+    { id: uid(), title: 'Animate a 10-frame walk cycle', desc: 'Use the 12 principles of animation. Focus on weight and timing.', discipline: 'Animation', difficulty: 'Intermediate', tool: 'Blender / Moho', freq: 'Daily', done: false, date: today() },
+    { id: uid(), title: 'Color grade a raw clip', desc: 'Import any raw clip into DaVinci Resolve and apply a cinematic LUT.', discipline: 'Film / Video', difficulty: 'Beginner', tool: 'DaVinci Resolve', freq: 'Daily', done: false, date: today() },
+    { id: uid(), title: 'Build a basic 3rd person controller', desc: 'Use Unreal Engine\'s Blueprint to set up character movement.', discipline: 'Game Dev', difficulty: 'Intermediate', tool: 'Unreal Engine', freq: 'Weekly', done: false, date: today() },
+    { id: uid(), title: 'Create a 30-second beat', desc: 'Lay down drums, bass, and a melody in any free DAW.', discipline: 'Music Production', difficulty: 'Beginner', tool: 'LMMS / Audacity', freq: 'Daily', done: false, date: today() },
+    { id: uid(), title: 'Model and UV-unwrap a prop', desc: 'Low-poly environmental prop, textured in GIMP or Krita.', discipline: '3D Art', difficulty: 'Intermediate', tool: 'Blender + GIMP', freq: 'Weekly', done: false, date: today() },
+    { id: uid(), title: 'Illustrate a character turnaround', desc: '3-view character sheet in Inkscape or Procreate.', discipline: 'Illustration', difficulty: 'Intermediate', tool: 'Inkscape / Procreate', freq: 'Weekly', done: false, date: today() },
+  ];
+  state.projects = [
+    { id: uid(), name: 'Sample Short Film', desc: 'A 3-minute animated short exploring isolation.', category: 'Animation', status: 'active', progress: 45, due: '2025-09-01', tools: ['Blender', 'DaVinci Resolve'] },
+    { id: uid(), name: 'Studio Intro Reel', desc: 'Branded intro motion graphics package.', category: 'Motion Graphics', status: 'review', progress: 80, due: '2025-06-15', tools: ['Blender', 'DaVinci Resolve'] },
+  ];
+  state.skills = [
+    { id: uid(), name: 'Blender', discipline: '3D / Animation', level: 65 },
+    { id: uid(), name: 'DaVinci Resolve', discipline: 'Film / Video', level: 70 },
+    { id: uid(), name: 'Unreal Engine', discipline: 'Game Dev', level: 40 },
+    { id: uid(), name: 'Inkscape', discipline: 'Illustration', level: 55 },
+    { id: uid(), name: 'GIMP', discipline: 'Illustration', level: 60 },
+    { id: uid(), name: 'Moho', discipline: '3D / Animation', level: 35 },
+    { id: uid(), name: 'Procreate', discipline: 'Illustration', level: 75 },
+    { id: uid(), name: 'LMMS', discipline: 'Music', level: 30 },
+  ];
+  state.schedule = [
+    { id: uid(), title: 'Morning Challenge Block', day: 'Monday', time: '09:00', notes: 'Work on daily animation challenge together.' },
+    { id: uid(), title: 'Project Sprint Review', day: 'Wednesday', time: '14:00', notes: 'Review progress on all active projects.' },
+    { id: uid(), title: 'Free Exploration / Jam', day: 'Friday', time: '15:00', notes: 'Experiment with new tools and techniques freely.' },
+  ];
+  state.notes = [
+    { id: uid(), title: 'GitHub Setup Guide', category: 'Technical Notes', content: '1. Create a GitHub repo\n2. Upload this HTML file as index.html\n3. Enable GitHub Pages in Settings → Pages\n4. Share the live URL with your team\n\nNote: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.', date: today() }
+  ];
+  state.activity = [
+    { icon: '🎉', text: 'Studio Hub initialized. Welcome to your creative command center!', time: 'Just now' }
+  ];
+  save();
+}
+
+// ══ UTILS ══
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function today() { return new Date().toISOString().slice(0,10); }
+
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function addActivity(icon, text) {
+  state.activity.unshift({ icon, text, time: 'Just now' });
+  if (state.activity.length > 20) state.activity.pop();
+  save();
+}
+
+// ══ TABS ══
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  render();
+}
+
+// ══ MODALS ══
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ══ RENDER ══
+function render() {
+  renderDashboard();
+  renderProjects();
+  renderChallenges();
+  renderSchedule();
+  renderSkills();
+  renderTools();
+  renderNotes();
+}
+
+// ── Dashboard ──
+function renderDashboard() {
+  document.getElementById('studioName').textContent = state.studioName;
+
+  const activeProjects = state.projects.filter(p => p.status === 'active').length;
+  const todayChallenges = state.challenges.filter(c => c.date === today());
+  const doneChallenges = todayChallenges.filter(c => c.done).length;
+
+  document.getElementById('statRow').innerHTML = `
+    <div class="stat-pill"><strong>${state.projects.length}</strong> Projects</div>
+    <div class="stat-pill"><strong>${activeProjects}</strong> Active</div>
+    <div class="stat-pill"><strong>${doneChallenges}/${todayChallenges.length}</strong> Challenges Today</div>
+    <div class="stat-pill"><strong>${state.skills.length}</strong> Skills Tracked</div>
+  `;
+
+  // Dashboard challenges (today's only)
+  const dc = document.getElementById('dashChallenges');
+  const todays = state.challenges.slice(0, 4);
+  if (!todays.length) {
+    dc.innerHTML = `<div class="empty-state"><div class="emoji">⚡</div><p>No challenges yet.<br>Add some in Daily Challenges.</p></div>`;
+  } else {
+    dc.innerHTML = todays.map(c => `
+      <div class="challenge-item ${c.done ? 'done' : ''}" onclick="toggleChallenge('${c.id}')">
+        <div class="challenge-icon" style="background:var(--panel)">${disciplineEmoji(c.discipline)}</div>
+        <div style="flex:1">
+          <div class="challenge-text">${c.title}</div>
+          <div class="challenge-meta">${c.discipline} · ${c.tool}</div>
+        </div>
+        <div class="challenge-check">${c.done ? '✓' : ''}</div>
+      </div>
+    `).join('');
+  }
+
+  // Dashboard projects
+  const dp = document.getElementById('dashProjects');
+  const active = state.projects.filter(p => p.status === 'active').slice(0, 4);
+  if (!active.length) {
+    dp.innerHTML = `<div class="empty-state"><div class="emoji">🎬</div><p>No active projects yet.</p></div>`;
+  } else {
+    dp.innerHTML = active.map(p => `
+      <div style="padding:12px;background:var(--panel);border-radius:8px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-family:var(--font-display);font-size:14px;font-weight:700">${p.name}</span>
+          <span class="status-badge status-${p.status}">${p.status}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%"></div></div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">${p.progress}% complete</div>
+      </div>
+    `).join('');
+  }
+
+  // Activity
+  const af = document.getElementById('activityFeed');
+  if (!state.activity.length) {
+    af.innerHTML = `<div class="empty-state"><div class="emoji">📡</div><p>No activity yet.</p></div>`;
+  } else {
+    af.innerHTML = state.activity.slice(0, 8).map(a => `
+      <div class="activity-item">
+        <div class="activity-icon">${a.icon}</div>
+        <div>
+          <div class="activity-text">${a.text}</div>
+          <div class="activity-time">${a.time}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ── Projects ──
+function renderProjects() {
+  const g = document.getElementById('projectsGrid');
+  if (!state.projects.length) {
+    g.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🎬</div><p>No projects yet. Click <strong>+ New Project</strong> to get started.</p></div>`;
+    return;
+  }
+  g.innerHTML = state.projects.map(p => `
+    <div class="project-card status-${p.status}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div class="project-name">${p.name}</div>
+        <span class="status-badge status-${p.status}">${p.status}</span>
+      </div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-tags">
+        <span class="tag">${p.category}</span>
+        ${(p.tools || []).map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%"></div></div>
+      <div class="project-footer">
+        <span>${p.progress}% complete</span>
+        <span>${p.due ? 'Due ' + formatDate(p.due) : ''}</span>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px" onclick="editProject('${p.id}')">Edit</button>
+        <button class="btn btn-danger" style="font-size:11px;padding:6px 12px" onclick="deleteProject('${p.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Challenges ──
+function renderChallenges() {
+  const g = document.getElementById('challengesGrid');
+  const disciplines = [...new Set(state.challenges.map(c => c.discipline))];
+
+  if (!state.challenges.length) {
+    g.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">⚡</div><p>No challenges yet. Build your skill-building library!</p></div>`;
+    return;
+  }
+
+  const discColors = { 'Animation':'#e8ff47','Film / Video':'#47c8ff','Game Dev':'#ff9f47','Music Production':'#c847ff','3D Art':'#47ffb8','Illustration':'#ff4f7b','Sound Design':'#4788ff','Motion Graphics':'#ffdd47','Writing / Script':'#a0a0ff' };
+
+  g.innerHTML = disciplines.map(disc => {
+    const items = state.challenges.filter(c => c.discipline === disc);
+    const color = discColors[disc] || 'var(--accent)';
+    return `
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:${color}"></span>
+            ${disciplineEmoji(disc)} ${disc}
+          </div>
+          <span class="challenge-badge">${items.filter(c=>c.done).length}/${items.length}</span>
+        </div>
+        ${items.map(c => `
+          <div class="challenge-item ${c.done ? 'done' : ''}" onclick="toggleChallenge('${c.id}')">
+            <div style="flex:1">
+              <div class="challenge-text">${c.title}</div>
+              <div class="challenge-meta">${c.difficulty} · ${c.tool} · ${c.freq}</div>
+              ${c.desc ? `<div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">${c.desc}</div>` : ''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check">${c.done ? '✓' : ''}</div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('${c.id}')">×</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Schedule ──
+function renderSchedule() {
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const g = document.getElementById('scheduleGrid');
+  g.innerHTML = days.map(day => {
+    const events = state.schedule.filter(s => s.day === day).sort((a,b) => a.time.localeCompare(b.time));
+    return `
+      <div class="schedule-day">
+        <div class="day-name">${day}</div>
+        ${events.length ? events.map(e => `
+          <div class="schedule-item">
+            <div class="schedule-time">${e.time}</div>
+            <div style="font-size:13px;font-weight:500">${e.title}</div>
+            ${e.notes ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">${e.notes}</div>` : ''}
+            <button class="btn btn-danger" style="font-size:10px;padding:2px 7px;margin-top:6px" onclick="deleteScheduleEvent('${e.id}')">Remove</button>
+          </div>
+        `).join('') : `<div style="font-size:12px;color:var(--muted);font-style:italic">Nothing scheduled</div>`}
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Skills ──
+function renderSkills() {
+  const sl = document.getElementById('skillsList');
+  if (!state.skills.length) {
+    sl.innerHTML = `<div class="empty-state"><div class="emoji">📈</div><p>Track your skills here.</p></div>`;
+  } else {
+    sl.innerHTML = state.skills.map(s => `
+      <div class="skill-row">
+        <div class="skill-name">${s.name}</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:${s.level}%"></div></div>
+        <div class="skill-level">${s.level}%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('${s.id}')">×</button>
+      </div>
+    `).join('');
+  }
+
+  // Discipline overview
+  const disciplines = {};
+  state.skills.forEach(s => {
+    if (!disciplines[s.discipline]) disciplines[s.discipline] = [];
+    disciplines[s.discipline].push(s.level);
+  });
+
+  const do_ = document.getElementById('disciplineOverview');
+  if (!Object.keys(disciplines).length) {
+    do_.innerHTML = `<div class="empty-state"><div class="emoji">🎯</div><p>Add skills to see discipline stats.</p></div>`;
+  } else {
+    do_.innerHTML = Object.entries(disciplines).map(([disc, levels]) => {
+      const avg = Math.round(levels.reduce((a,b) => a+b, 0) / levels.length);
+      return `
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">${disc}</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:${avg}%"></div></div>
+          <div class="skill-level">${avg}%</div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// ── Tools ──
+const TOOLS = [
+  { emoji:'🎨', name:'Blender', cat:'3D / Animation', url:'https://blender.org', desc:'Free 3D creation suite — modeling, animation, VFX, rendering.' },
+  { emoji:'🎬', name:'DaVinci Resolve', cat:'Film / Video', url:'https://blackmagicdesign.com/products/davinciresolve', desc:'Professional color grading & video editing.' },
+  { emoji:'🐊', name:'Moho', cat:'Animation', url:'https://moho.lostmarble.com', desc:'2D animation with bone rigging. Debut version is free.' },
+  { emoji:'🖼️', name:'GIMP', cat:'Illustration', url:'https://gimp.org', desc:'Open-source image editing & digital painting.' },
+  { emoji:'✒️', name:'Inkscape', cat:'Illustration', url:'https://inkscape.org', desc:'Professional vector graphics editor. Free & open source.' },
+  { emoji:'🎭', name:'Procreate', cat:'Illustration', url:'https://procreate.com', desc:'iPad painting app. Industry standard for concept art.' },
+  { emoji:'🎮', name:'Unreal Engine', cat:'Game Dev', url:'https://unrealengine.com', desc:'Free AAA game engine. Powerful Blueprint visual scripting.' },
+  { emoji:'🎮', name:'Godot', cat:'Game Dev', url:'https://godotengine.org', desc:'Lightweight open-source game engine. Great for 2D & 3D.' },
+  { emoji:'🎵', name:'LMMS', cat:'Music Production', url:'https://lmms.io', desc:'Free cross-platform DAW. Beat + bassline editor included.' },
+  { emoji:'🎙️', name:'Audacity', cat:'Sound / Audio', url:'https://audacityteam.org', desc:'Free open-source audio editor & recorder.' },
+  { emoji:'🎧', name:'Ardour', cat:'Music Production', url:'https://ardour.org', desc:'Professional open-source DAW for recording & mixing.' },
+  { emoji:'🖌️', name:'Krita', cat:'Illustration', url:'https://krita.org', desc:'Free digital painting & 2D animation. Great for concept art.' },
+  { emoji:'🎞️', name:'Kdenlive', cat:'Film / Video', url:'https://kdenlive.org', desc:'Free open-source video editor. Multi-track editing.' },
+  { emoji:'🌊', name:'Natron', cat:'VFX / Compositing', url:'https://natrongithub.github.io', desc:'Free open-source compositing software (like Nuke).' },
+  { emoji:'🔊', name:'REAPER', cat:'Sound Design', url:'https://reaper.fm', desc:'Full-featured DAW. Free to try, affordable license.' },
+  { emoji:'📝', name:'Fountain', cat:'Writing', url:'https://fountain.io', desc:'Plain text markup for screenwriting. Free tools available.' },
+];
+
+function renderTools() {
+  document.getElementById('toolsGrid').innerHTML = TOOLS.map(t => `
+    <div class="tool-card">
+      <div class="tool-emoji">${t.emoji}</div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-category">${t.cat}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">${t.desc}</div>
+      <a class="tool-link" href="${t.url}" target="_blank">→ Visit Site</a>
+    </div>
+  `).join('');
+}
+
+// ── Notes ──
+function renderNotes() {
+  const g = document.getElementById('notesGrid');
+  if (!state.notes.length) {
+    g.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="emoji">📝</div><p>No notes yet. Keep scripts, briefs, and ideas here.</p></div>`;
+    return;
+  }
+  g.innerHTML = state.notes.map(n => `
+    <div class="note-card" onclick="viewNote('${n.id}')">
+      <div class="tag" style="margin-bottom:8px">${n.category}</div>
+      <div class="note-title">${n.title}</div>
+      <div class="note-preview">${n.content}</div>
+      <div class="note-date">${formatDate(n.date)}</div>
+    </div>
+  `).join('');
+}
+
+// ══ CRUD ══
+
+function saveProject() {
+  const name = document.getElementById('proj-name').value.trim();
+  if (!name) return alert('Please enter a project name.');
+  const tools = document.getElementById('proj-tools').value.split(',').map(t => t.trim()).filter(Boolean);
+  const proj = {
+    id: uid(),
+    name,
+    desc: document.getElementById('proj-desc').value,
+    category: document.getElementById('proj-cat').value,
+    status: document.getElementById('proj-status').value,
+    progress: parseInt(document.getElementById('proj-progress').value) || 0,
+    due: document.getElementById('proj-due').value,
+    tools
+  };
+  state.projects.unshift(proj);
+  addActivity('🎬', `New project added: "${proj.name}"`);
+  save();
+  closeModal('projectModal');
+  ['proj-name','proj-desc','proj-tools','proj-due'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('proj-progress').value = 0;
+  render();
+}
+
+function editProject(id) {
+  const p = state.projects.find(x => x.id === id);
+  if (!p) return;
+  const newProgress = prompt('Update progress (0-100):', p.progress);
+  if (newProgress !== null) {
+    p.progress = Math.min(100, Math.max(0, parseInt(newProgress) || 0));
+    const newStatus = prompt('Update status (active/review/hold/done):', p.status);
+    if (newStatus && ['active','review','hold','done'].includes(newStatus)) p.status = newStatus;
+    addActivity('✏️', `Updated project: "${p.name}"`);
+    save();
+    render();
+  }
+}
+
+function deleteProject(id) {
+  const p = state.projects.find(x => x.id === id);
+  if (!confirm(`Delete "${p?.name}"?`)) return;
+  state.projects = state.projects.filter(x => x.id !== id);
+  addActivity('🗑️', `Deleted project: "${p?.name}"`);
+  save();
+  render();
+}
+
+function saveChallenge() {
+  const title = document.getElementById('ch-title').value.trim();
+  if (!title) return alert('Please enter a challenge title.');
+  const ch = {
+    id: uid(),
+    title,
+    desc: document.getElementById('ch-desc').value,
+    discipline: document.getElementById('ch-disc').value,
+    difficulty: document.getElementById('ch-diff').value,
+    tool: document.getElementById('ch-tool').value,
+    freq: document.getElementById('ch-freq').value,
+    done: false,
+    date: today()
+  };
+  state.challenges.unshift(ch);
+  addActivity('⚡', `New challenge added: "${ch.title}"`);
+  save();
+  closeModal('challengeModal');
+  ['ch-title','ch-desc','ch-tool'].forEach(id => document.getElementById(id).value = '');
+  render();
+}
+
+function toggleChallenge(id) {
+  const c = state.challenges.find(x => x.id === id);
+  if (!c) return;
+  c.done = !c.done;
+  if (c.done) addActivity('✅', `Challenge completed: "${c.title}"`);
+  save();
+  render();
+}
+
+function deleteChallenge(id) {
+  const c = state.challenges.find(x => x.id === id);
+  if (!confirm(`Delete "${c?.title}"?`)) return;
+  state.challenges = state.challenges.filter(x => x.id !== id);
+  save();
+  render();
+}
+
+function saveScheduleEvent() {
+  const title = document.getElementById('sched-title').value.trim();
+  if (!title) return alert('Please enter an event title.');
+  const ev = {
+    id: uid(),
+    title,
+    day: document.getElementById('sched-day').value,
+    time: document.getElementById('sched-time').value || '09:00',
+    notes: document.getElementById('sched-notes').value
+  };
+  state.schedule.push(ev);
+  addActivity('📅', `New schedule event: "${ev.title}" on ${ev.day}`);
+  save();
+  closeModal('scheduleModal');
+  ['sched-title','sched-notes'].forEach(id => document.getElementById(id).value = '');
+  render();
+}
+
+function deleteScheduleEvent(id) {
+  state.schedule = state.schedule.filter(x => x.id !== id);
+  save();
+  render();
+}
+
+function saveSkill() {
+  const name = document.getElementById('sk-name').value.trim();
+  if (!name) return alert('Enter a skill name.');
+  const sk = {
+    id: uid(),
+    name,
+    discipline: document.getElementById('sk-disc').value,
+    level: parseInt(document.getElementById('sk-level').value) || 50
+  };
+  state.skills.push(sk);
+  addActivity('📈', `Skill tracked: "${sk.name}"`);
+  save();
+  closeModal('skillModal');
+  document.getElementById('sk-name').value = '';
+  render();
+}
+
+function deleteSkill(id) {
+  state.skills = state.skills.filter(x => x.id !== id);
+  save();
+  render();
+}
+
+function saveNote() {
+  const title = document.getElementById('note-title').value.trim();
+  if (!title) return alert('Enter a note title.');
+  const n = {
+    id: uid(),
+    title,
+    category: document.getElementById('note-cat').value,
+    content: document.getElementById('note-content').value,
+    date: today()
+  };
+  state.notes.unshift(n);
+  addActivity('📝', `New note: "${n.title}"`);
+  save();
+  closeModal('noteModal');
+  ['note-title','note-content'].forEach(id => document.getElementById(id).value = '');
+  render();
+}
+
+function viewNote(id) {
+  const n = state.notes.find(x => x.id === id);
+  if (!n) return;
+  document.getElementById('viewNoteTitle').textContent = n.title;
+  document.getElementById('viewNoteMeta').textContent = `${n.category} · ${formatDate(n.date)}`;
+  document.getElementById('viewNoteContent').textContent = n.content;
+  document.getElementById('deleteNoteBtn').onclick = () => {
+    if (confirm(`Delete "${n.title}"?`)) {
+      state.notes = state.notes.filter(x => x.id !== id);
+      save();
+      closeModal('viewNoteModal');
+      render();
+    }
+  };
+  openModal('viewNoteModal');
+}
+
+// ══ HELPERS ══
+function disciplineEmoji(d) {
+  const map = {
+    'Animation':'🎭','Film / Video':'🎬','Game Dev':'🎮','Music Production':'🎵','3D Art':'🧊','Illustration':'🖌️','Sound Design':'🔊','Motion Graphics':'✨','Writing / Script':'📝','Other':'⚡'
+  };
+  return map[d] || '⚡';
+}
+
+// ══ EXPORT ══
+function exportHub() {
+  // Grab the full HTML source of this page
+  const source = document.documentElement.outerHTML;
+
+  // Find the seedDefaults function and replace it so the exported file
+  // opens with the current state baked in as defaults
+  const dataScript = `
+  // ══ BAKED-IN DATA (exported ${new Date().toLocaleString()}) ══
+  function seedDefaults() {
+    const baked = ${JSON.stringify(state, null, 2)};
+    state = baked;
+    save();
+  }`;
+
+  // Replace the seedDefaults block in the exported source
+  const exportedSource = source.replace(
+    /\/\/ ══ BAKED-IN DATA[\s\S]*?function seedDefaults\(\) \{[\s\S]*?\n  \}/,
+    dataScript
+  ).replace(
+    /function seedDefaults\(\) \{[\s\S]*?\n  save\(\);\n\}/,
+    dataScript
+  );
+
+  const blob = new Blob([exportedSource], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `studio-hub-${new Date().toISOString().slice(0,10)}.html`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  addActivity('⬇️', 'Hub exported as HTML snapshot');
+  render();
+}
+
+// ══ HEADER DATE ══
+function updateDate() {
+  const d = new Date();
+  document.getElementById('headerDate').textContent = d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+
+// ══ INIT ══
+load();
+updateDate();
+render();
+</script>
+</body>
+</html>
