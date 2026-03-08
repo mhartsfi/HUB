@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STUDIO HUB — Creative Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0c;
@@ -865,29 +863,28 @@
 <body>
 
 <!-- LOCK SCREEN -->
-<div id="lockScreen">
+<div id="lockScreen" style="transition: opacity 0.4s; opacity: 0; display: none;">
   <div class="lock-box">
     <span class="lock-icon">🔐</span>
     <div class="lock-title">STUDIO <span>HUB</span></div>
     <div class="lock-sub">Creative Command Center<br>Enter your studio password to continue.</div>
     <div class="lock-dots" id="lockDots">
-      <div class="lock-dot" id="d0"></div>
-      <div class="lock-dot" id="d1"></div>
-      <div class="lock-dot" id="d2"></div>
-      <div class="lock-dot" id="d3"></div>
+      <div class="lock-dot filled" id="d0"></div>
+      <div class="lock-dot filled" id="d1"></div>
+      <div class="lock-dot filled" id="d2"></div>
+      <div class="lock-dot filled" id="d3"></div>
     </div>
     <div class="lock-input-wrap">
-      <input type="password" id="lockInput" placeholder="••••••••" maxlength="32"
-        oninput="onLockType()" onkeydown="if(event.key==='Enter')tryUnlock()">
+      <input type="password" id="lockInput" placeholder="••••••••" maxlength="32" oninput="onLockType()" onkeydown="if(event.key==='Enter')tryUnlock()" class="">
     </div>
     <div class="lock-error" id="lockError"></div>
     <button id="unlockBtn" onclick="tryUnlock()">ENTER STUDIO →</button>
-    <div class="lock-hint" id="lockHint"></div>
+    <div class="lock-hint" id="lockHint">Default password: studio2025  —  change it inside the Hub</div>
   </div>
 </div>
 
 <!-- CHANGE PASSWORD MODAL -->
-<div id="changePwModal">
+<div id="changePwModal" class="">
   <div class="modal" style="max-width:400px">
     <div class="modal-title">Change Password</div>
     <div class="form-group">
@@ -902,7 +899,7 @@
       <label>Confirm New Password</label>
       <input type="password" id="pw-confirm" placeholder="Confirm new password">
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px" id="pwChangeMsg"></div>
+    <div style="font-size: 12px; color: var(--accent); margin-bottom: 16px;" id="pwChangeMsg">✓ Password updated! It will be baked into your next export.</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
       <button class="btn btn-ghost" onclick="document.getElementById('changePwModal').classList.remove('open')">Cancel</button>
@@ -917,7 +914,7 @@
     <span>STUDIO HUB</span>
   </div>
   <div style="display:flex;align-items:center;gap:16px">
-    <div class="header-date" id="headerDate"></div>
+    <div class="header-date" id="headerDate">Sunday, March 8, 2026</div>
     <button class="btn btn-primary" onclick="exportHub()" style="font-size:12px;padding:7px 16px">⬇ Export HTML</button>
     <button class="btn btn-ghost" onclick="document.getElementById('changePwModal').classList.add('open')" style="font-size:12px;padding:7px 16px">🔑 Password</button>
   </div>
@@ -941,7 +938,12 @@
     <div class="dash-hero">
       <h1>Welcome back,<br><span id="studioName">Creative Studio</span>.</h1>
       <p>Your creative command center. Track projects, sharpen your skills, and crush daily challenges — all in one place.</p>
-      <div class="stat-row" id="statRow"></div>
+      <div class="stat-row" id="statRow">
+    <div class="stat-pill"><strong>2</strong> Projects</div>
+    <div class="stat-pill"><strong>1</strong> Active</div>
+    <div class="stat-pill"><strong>0/6</strong> Challenges Today</div>
+    <div class="stat-pill"><strong>8</strong> Skills Tracked</div>
+  </div>
     </div>
 
     <div class="github-banner">
@@ -952,11 +954,56 @@
     <div class="grid-2">
       <div class="card">
         <div class="card-title"><span class="dot" style="background:var(--accent)"></span>Today's Challenges</div>
-        <div id="dashChallenges"></div>
+        <div id="dashChallenges">
+      <div class="challenge-item " onclick="toggleChallenge('mmi7enuyg51h9aundrl')">
+        <div class="challenge-icon" style="background:var(--panel)">🎭</div>
+        <div style="flex:1">
+          <div class="challenge-text">Animate a 10-frame walk cycle</div>
+          <div class="challenge-meta">Animation · Blender / Moho</div>
+        </div>
+        <div class="challenge-check"></div>
+      </div>
+    
+      <div class="challenge-item " onclick="toggleChallenge('mmi7enuyzkzqhw2ta9e')">
+        <div class="challenge-icon" style="background:var(--panel)">🎬</div>
+        <div style="flex:1">
+          <div class="challenge-text">Color grade a raw clip</div>
+          <div class="challenge-meta">Film / Video · DaVinci Resolve</div>
+        </div>
+        <div class="challenge-check"></div>
+      </div>
+    
+      <div class="challenge-item " onclick="toggleChallenge('mmi7enuy9fbmgbs8c')">
+        <div class="challenge-icon" style="background:var(--panel)">🎮</div>
+        <div style="flex:1">
+          <div class="challenge-text">Build a basic 3rd person controller</div>
+          <div class="challenge-meta">Game Dev · Unreal Engine</div>
+        </div>
+        <div class="challenge-check"></div>
+      </div>
+    
+      <div class="challenge-item " onclick="toggleChallenge('mmi7enuyaqzw373lwqj')">
+        <div class="challenge-icon" style="background:var(--panel)">🎵</div>
+        <div style="flex:1">
+          <div class="challenge-text">Create a 30-second beat</div>
+          <div class="challenge-meta">Music Production · LMMS / Audacity</div>
+        </div>
+        <div class="challenge-check"></div>
+      </div>
+    </div>
       </div>
       <div class="card">
         <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Active Projects</div>
-        <div id="dashProjects"></div>
+        <div id="dashProjects">
+      <div style="padding:12px;background:var(--panel);border-radius:8px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-family:var(--font-display);font-size:14px;font-weight:700">Sample Short Film</span>
+          <span class="status-badge status-active">active</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">45% complete</div>
+      </div>
+    </div>
       </div>
     </div>
 
@@ -964,7 +1011,31 @@
 
     <div class="card">
       <div class="card-title"><span class="dot" style="background:var(--accent2)"></span>Recent Activity</div>
-      <div id="activityFeed"></div>
+      <div id="activityFeed">
+      <div class="activity-item">
+        <div class="activity-icon">🔑</div>
+        <div>
+          <div class="activity-text">Studio password updated</div>
+          <div class="activity-time">Just now</div>
+        </div>
+      </div>
+    
+      <div class="activity-item">
+        <div class="activity-icon">🔑</div>
+        <div>
+          <div class="activity-text">Studio password updated</div>
+          <div class="activity-time">Just now</div>
+        </div>
+      </div>
+    
+      <div class="activity-item">
+        <div class="activity-icon">🎉</div>
+        <div>
+          <div class="activity-text">Studio Hub initialized. Welcome to your creative command center!</div>
+          <div class="activity-time">Just now</div>
+        </div>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -978,7 +1049,49 @@
       <button class="btn btn-primary" onclick="openModal('projectModal')">+ New Project</button>
     </div>
 
-    <div class="grid-3" id="projectsGrid"></div>
+    <div class="grid-3" id="projectsGrid">
+    <div class="project-card status-active">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div class="project-name">Sample Short Film</div>
+        <span class="status-badge status-active">active</span>
+      </div>
+      <div class="project-desc">A 3-minute animated short exploring isolation.</div>
+      <div class="project-tags">
+        <span class="tag">Animation</span>
+        <span class="tag">Blender</span><span class="tag">DaVinci Resolve</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+      <div class="project-footer">
+        <span>45% complete</span>
+        <span>Due Aug 31, 2025</span>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px" onclick="editProject('mmi7enuy4pwdeqeeswy')">Edit</button>
+        <button class="btn btn-danger" style="font-size:11px;padding:6px 12px" onclick="deleteProject('mmi7enuy4pwdeqeeswy')">Delete</button>
+      </div>
+    </div>
+  
+    <div class="project-card status-review">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div class="project-name">Studio Intro Reel</div>
+        <span class="status-badge status-review">review</span>
+      </div>
+      <div class="project-desc">Branded intro motion graphics package.</div>
+      <div class="project-tags">
+        <span class="tag">Motion Graphics</span>
+        <span class="tag">Blender</span><span class="tag">DaVinci Resolve</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+      <div class="project-footer">
+        <span>80% complete</span>
+        <span>Due Jun 14, 2025</span>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px" onclick="editProject('mmi7enuyj7x6c9d0gzs')">Edit</button>
+        <button class="btn btn-danger" style="font-size:11px;padding:6px 12px" onclick="deleteProject('mmi7enuyj7x6c9d0gzs')">Delete</button>
+      </div>
+    </div>
+  </div>
   </section>
 
   <!-- ══ DAILY CHALLENGES ══ -->
@@ -991,7 +1104,145 @@
       <button class="btn btn-primary" onclick="openModal('challengeModal')">+ Add Challenge</button>
     </div>
 
-    <div class="grid-2" id="challengesGrid"></div>
+    <div class="grid-2" id="challengesGrid">
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#e8ff47"></span>
+            🎭 Animation
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuyg51h9aundrl')">
+            <div style="flex:1">
+              <div class="challenge-text">Animate a 10-frame walk cycle</div>
+              <div class="challenge-meta">Intermediate · Blender / Moho · Daily</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">Use the 12 principles of animation. Focus on weight and timing.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuyg51h9aundrl')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#47c8ff"></span>
+            🎬 Film / Video
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuyzkzqhw2ta9e')">
+            <div style="flex:1">
+              <div class="challenge-text">Color grade a raw clip</div>
+              <div class="challenge-meta">Beginner · DaVinci Resolve · Daily</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">Import any raw clip into DaVinci Resolve and apply a cinematic LUT.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuyzkzqhw2ta9e')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#ff9f47"></span>
+            🎮 Game Dev
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuy9fbmgbs8c')">
+            <div style="flex:1">
+              <div class="challenge-text">Build a basic 3rd person controller</div>
+              <div class="challenge-meta">Intermediate · Unreal Engine · Weekly</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">Use Unreal Engine's Blueprint to set up character movement.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuy9fbmgbs8c')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#c847ff"></span>
+            🎵 Music Production
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuyaqzw373lwqj')">
+            <div style="flex:1">
+              <div class="challenge-text">Create a 30-second beat</div>
+              <div class="challenge-meta">Beginner · LMMS / Audacity · Daily</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">Lay down drums, bass, and a melody in any free DAW.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuyaqzw373lwqj')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#47ffb8"></span>
+            🧊 3D Art
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuy7ibyjbgj9k8')">
+            <div style="flex:1">
+              <div class="challenge-text">Model and UV-unwrap a prop</div>
+              <div class="challenge-meta">Intermediate · Blender + GIMP · Weekly</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">Low-poly environmental prop, textured in GIMP or Krita.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuy7ibyjbgj9k8')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    
+      <div class="card">
+        <div class="challenge-header">
+          <div class="card-title" style="margin-bottom:0">
+            <span class="dot" style="background:#ff4f7b"></span>
+            🖌️ Illustration
+          </div>
+          <span class="challenge-badge">0/1</span>
+        </div>
+        
+          <div class="challenge-item " onclick="toggleChallenge('mmi7enuywg6nrm3t4dd')">
+            <div style="flex:1">
+              <div class="challenge-text">Illustrate a character turnaround</div>
+              <div class="challenge-meta">Intermediate · Inkscape / Procreate · Weekly</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4">3-view character sheet in Inkscape or Procreate.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <div class="challenge-check"></div>
+              <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="event.stopPropagation();deleteChallenge('mmi7enuywg6nrm3t4dd')">×</button>
+            </div>
+          </div>
+        
+      </div>
+    </div>
   </section>
 
   <!-- ══ SCHEDULE ══ -->
@@ -1003,7 +1254,63 @@
       </div>
       <button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button>
     </div>
-    <div class="grid-3" id="scheduleGrid"></div>
+    <div class="grid-3" id="scheduleGrid">
+      <div class="schedule-day">
+        <div class="day-name">Monday</div>
+        
+          <div class="schedule-item">
+            <div class="schedule-time">09:00</div>
+            <div style="font-size:13px;font-weight:500">Morning Challenge Block</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Work on daily animation challenge together.</div>
+            <button class="btn btn-danger" style="font-size:10px;padding:2px 7px;margin-top:6px" onclick="deleteScheduleEvent('mmi7enuy430vumfiivn')">Remove</button>
+          </div>
+        
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Tuesday</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic">Nothing scheduled</div>
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Wednesday</div>
+        
+          <div class="schedule-item">
+            <div class="schedule-time">14:00</div>
+            <div style="font-size:13px;font-weight:500">Project Sprint Review</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Review progress on all active projects.</div>
+            <button class="btn btn-danger" style="font-size:10px;padding:2px 7px;margin-top:6px" onclick="deleteScheduleEvent('mmi7enuy2d5nf8ta4sx')">Remove</button>
+          </div>
+        
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Thursday</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic">Nothing scheduled</div>
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Friday</div>
+        
+          <div class="schedule-item">
+            <div class="schedule-time">15:00</div>
+            <div style="font-size:13px;font-weight:500">Free Exploration / Jam</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Experiment with new tools and techniques freely.</div>
+            <button class="btn btn-danger" style="font-size:10px;padding:2px 7px;margin-top:6px" onclick="deleteScheduleEvent('mmi7enuydfqooji1vvw')">Remove</button>
+          </div>
+        
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Saturday</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic">Nothing scheduled</div>
+      </div>
+    
+      <div class="schedule-day">
+        <div class="day-name">Sunday</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic">Nothing scheduled</div>
+      </div>
+    </div>
   </section>
 
   <!-- ══ SKILLS ══ -->
@@ -1011,18 +1318,104 @@
     <div class="section-header">
       <div>
         <div class="section-title">Skill Tracker</div>
-        <div class="section-sub">Rate your proficiency in studio tools & disciplines</div>
+        <div class="section-sub">Rate your proficiency in studio tools &amp; disciplines</div>
       </div>
       <button class="btn btn-primary" onclick="openModal('skillModal')">+ Add Skill</button>
     </div>
     <div class="grid-2">
       <div class="card" id="skillsCard">
         <div class="card-title"><span class="dot" style="background:var(--accent)"></span>Tracked Skills</div>
-        <div id="skillsList"></div>
+        <div id="skillsList">
+      <div class="skill-row">
+        <div class="skill-name">Blender</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+        <div class="skill-level">65%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuyy8dxoip4kse')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">DaVinci Resolve</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        <div class="skill-level">70%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuylusxuspgm5')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">Unreal Engine</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div>
+        <div class="skill-level">40%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuys298n8lul7b')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">Inkscape</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
+        <div class="skill-level">55%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuya9tmk3h0tof')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">GIMP</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        <div class="skill-level">60%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuyg6op1jqe23w')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">Moho</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:35%"></div></div>
+        <div class="skill-level">35%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuy9whavy82fop')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">Procreate</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        <div class="skill-level">75%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuyvmgep7lln9c')">×</button>
+      </div>
+    
+      <div class="skill-row">
+        <div class="skill-name">LMMS</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div>
+        <div class="skill-level">30%</div>
+        <button class="btn btn-danger" style="font-size:10px;padding:3px 8px" onclick="deleteSkill('mmi7enuyae3wk41a1yf')">×</button>
+      </div>
+    </div>
       </div>
       <div class="card">
         <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Discipline Overview</div>
-        <div id="disciplineOverview"></div>
+        <div id="disciplineOverview">
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">3D / Animation</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div>
+          <div class="skill-level">50%</div>
+        </div>
+      
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">Film / Video</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+          <div class="skill-level">70%</div>
+        </div>
+      
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">Game Dev</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div>
+          <div class="skill-level">40%</div>
+        </div>
+      
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">Illustration</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:63%"></div></div>
+          <div class="skill-level">63%</div>
+        </div>
+      
+        <div class="skill-row">
+          <div class="skill-name" style="font-family:var(--font-display);font-size:13px">Music</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div>
+          <div class="skill-level">30%</div>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1032,22 +1425,162 @@
     <div class="section-header">
       <div>
         <div class="section-title">Studio Toolkit</div>
-        <div class="section-sub">Free & open-source software for every discipline</div>
+        <div class="section-sub">Free &amp; open-source software for every discipline</div>
       </div>
     </div>
-    <div class="grid-4" id="toolsGrid"></div>
+    <div class="grid-4" id="toolsGrid">
+    <div class="tool-card">
+      <div class="tool-emoji">🎨</div>
+      <div class="tool-name">Blender</div>
+      <div class="tool-category">3D / Animation</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free 3D creation suite — modeling, animation, VFX, rendering.</div>
+      <a class="tool-link" href="https://blender.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎬</div>
+      <div class="tool-name">DaVinci Resolve</div>
+      <div class="tool-category">Film / Video</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Professional color grading &amp; video editing.</div>
+      <a class="tool-link" href="https://blackmagicdesign.com/products/davinciresolve" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🐊</div>
+      <div class="tool-name">Moho</div>
+      <div class="tool-category">Animation</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">2D animation with bone rigging. Debut version is free.</div>
+      <a class="tool-link" href="https://moho.lostmarble.com" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🖼️</div>
+      <div class="tool-name">GIMP</div>
+      <div class="tool-category">Illustration</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Open-source image editing &amp; digital painting.</div>
+      <a class="tool-link" href="https://gimp.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">✒️</div>
+      <div class="tool-name">Inkscape</div>
+      <div class="tool-category">Illustration</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Professional vector graphics editor. Free &amp; open source.</div>
+      <a class="tool-link" href="https://inkscape.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎭</div>
+      <div class="tool-name">Procreate</div>
+      <div class="tool-category">Illustration</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">iPad painting app. Industry standard for concept art.</div>
+      <a class="tool-link" href="https://procreate.com" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎮</div>
+      <div class="tool-name">Unreal Engine</div>
+      <div class="tool-category">Game Dev</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free AAA game engine. Powerful Blueprint visual scripting.</div>
+      <a class="tool-link" href="https://unrealengine.com" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎮</div>
+      <div class="tool-name">Godot</div>
+      <div class="tool-category">Game Dev</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Lightweight open-source game engine. Great for 2D &amp; 3D.</div>
+      <a class="tool-link" href="https://godotengine.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎵</div>
+      <div class="tool-name">LMMS</div>
+      <div class="tool-category">Music Production</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free cross-platform DAW. Beat + bassline editor included.</div>
+      <a class="tool-link" href="https://lmms.io" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎙️</div>
+      <div class="tool-name">Audacity</div>
+      <div class="tool-category">Sound / Audio</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free open-source audio editor &amp; recorder.</div>
+      <a class="tool-link" href="https://audacityteam.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎧</div>
+      <div class="tool-name">Ardour</div>
+      <div class="tool-category">Music Production</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Professional open-source DAW for recording &amp; mixing.</div>
+      <a class="tool-link" href="https://ardour.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🖌️</div>
+      <div class="tool-name">Krita</div>
+      <div class="tool-category">Illustration</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free digital painting &amp; 2D animation. Great for concept art.</div>
+      <a class="tool-link" href="https://krita.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🎞️</div>
+      <div class="tool-name">Kdenlive</div>
+      <div class="tool-category">Film / Video</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free open-source video editor. Multi-track editing.</div>
+      <a class="tool-link" href="https://kdenlive.org" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🌊</div>
+      <div class="tool-name">Natron</div>
+      <div class="tool-category">VFX / Compositing</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Free open-source compositing software (like Nuke).</div>
+      <a class="tool-link" href="https://natrongithub.github.io" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">🔊</div>
+      <div class="tool-name">REAPER</div>
+      <div class="tool-category">Sound Design</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Full-featured DAW. Free to try, affordable license.</div>
+      <a class="tool-link" href="https://reaper.fm" target="_blank">→ Visit Site</a>
+    </div>
+  
+    <div class="tool-card">
+      <div class="tool-emoji">📝</div>
+      <div class="tool-name">Fountain</div>
+      <div class="tool-category">Writing</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.4;flex:1">Plain text markup for screenwriting. Free tools available.</div>
+      <a class="tool-link" href="https://fountain.io" target="_blank">→ Visit Site</a>
+    </div>
+  </div>
   </section>
 
   <!-- ══ NOTES ══ -->
   <section id="tab-notes" class="section">
     <div class="section-header">
       <div>
-        <div class="section-title">Notes & Docs</div>
+        <div class="section-title">Notes &amp; Docs</div>
         <div class="section-sub">Ideas, scripts, briefs, and references</div>
       </div>
       <button class="btn btn-primary" onclick="openModal('noteModal')">+ New Note</button>
     </div>
-    <div class="grid-3" id="notesGrid"></div>
+    <div class="grid-3" id="notesGrid">
+    <div class="note-card" onclick="viewNote('mmi7enuyhcqkv07s4b9')">
+      <div class="tag" style="margin-bottom:8px">Technical Notes</div>
+      <div class="note-title">GitHub Setup Guide</div>
+      <div class="note-preview">1. Create a GitHub repo
+2. Upload this HTML file as index.html
+3. Enable GitHub Pages in Settings → Pages
+4. Share the live URL with your team
+
+Note: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.</div>
+      <div class="note-date">Mar 7, 2026</div>
+    </div>
+  </div>
   </section>
 
 </main>
@@ -1307,43 +1840,210 @@ function load() {
   }
 }
 
-function seedDefaults() {
-  state.studioName = 'Creative Studio';
-  state.challenges = [
-    { id: uid(), title: 'Animate a 10-frame walk cycle', desc: 'Use the 12 principles of animation. Focus on weight and timing.', discipline: 'Animation', difficulty: 'Intermediate', tool: 'Blender / Moho', freq: 'Daily', done: false, date: today() },
-    { id: uid(), title: 'Color grade a raw clip', desc: 'Import any raw clip into DaVinci Resolve and apply a cinematic LUT.', discipline: 'Film / Video', difficulty: 'Beginner', tool: 'DaVinci Resolve', freq: 'Daily', done: false, date: today() },
-    { id: uid(), title: 'Build a basic 3rd person controller', desc: 'Use Unreal Engine\'s Blueprint to set up character movement.', discipline: 'Game Dev', difficulty: 'Intermediate', tool: 'Unreal Engine', freq: 'Weekly', done: false, date: today() },
-    { id: uid(), title: 'Create a 30-second beat', desc: 'Lay down drums, bass, and a melody in any free DAW.', discipline: 'Music Production', difficulty: 'Beginner', tool: 'LMMS / Audacity', freq: 'Daily', done: false, date: today() },
-    { id: uid(), title: 'Model and UV-unwrap a prop', desc: 'Low-poly environmental prop, textured in GIMP or Krita.', discipline: '3D Art', difficulty: 'Intermediate', tool: 'Blender + GIMP', freq: 'Weekly', done: false, date: today() },
-    { id: uid(), title: 'Illustrate a character turnaround', desc: '3-view character sheet in Inkscape or Procreate.', discipline: 'Illustration', difficulty: 'Intermediate', tool: 'Inkscape / Procreate', freq: 'Weekly', done: false, date: today() },
-  ];
-  state.projects = [
-    { id: uid(), name: 'Sample Short Film', desc: 'A 3-minute animated short exploring isolation.', category: 'Animation', status: 'active', progress: 45, due: '2025-09-01', tools: ['Blender', 'DaVinci Resolve'] },
-    { id: uid(), name: 'Studio Intro Reel', desc: 'Branded intro motion graphics package.', category: 'Motion Graphics', status: 'review', progress: 80, due: '2025-06-15', tools: ['Blender', 'DaVinci Resolve'] },
-  ];
-  state.skills = [
-    { id: uid(), name: 'Blender', discipline: '3D / Animation', level: 65 },
-    { id: uid(), name: 'DaVinci Resolve', discipline: 'Film / Video', level: 70 },
-    { id: uid(), name: 'Unreal Engine', discipline: 'Game Dev', level: 40 },
-    { id: uid(), name: 'Inkscape', discipline: 'Illustration', level: 55 },
-    { id: uid(), name: 'GIMP', discipline: 'Illustration', level: 60 },
-    { id: uid(), name: 'Moho', discipline: '3D / Animation', level: 35 },
-    { id: uid(), name: 'Procreate', discipline: 'Illustration', level: 75 },
-    { id: uid(), name: 'LMMS', discipline: 'Music', level: 30 },
-  ];
-  state.schedule = [
-    { id: uid(), title: 'Morning Challenge Block', day: 'Monday', time: '09:00', notes: 'Work on daily animation challenge together.' },
-    { id: uid(), title: 'Project Sprint Review', day: 'Wednesday', time: '14:00', notes: 'Review progress on all active projects.' },
-    { id: uid(), title: 'Free Exploration / Jam', day: 'Friday', time: '15:00', notes: 'Experiment with new tools and techniques freely.' },
-  ];
-  state.notes = [
-    { id: uid(), title: 'GitHub Setup Guide', category: 'Technical Notes', content: '1. Create a GitHub repo\n2. Upload this HTML file as index.html\n3. Enable GitHub Pages in Settings → Pages\n4. Share the live URL with your team\n\nNote: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.', date: today() }
-  ];
-  state.activity = [
-    { icon: '🎉', text: 'Studio Hub initialized. Welcome to your creative command center!', time: 'Just now' }
-  ];
-  save();
-}
+
+  // ══ BAKED-IN DATA (exported 3/8/2026, 6:25:01 PM) ══
+  function seedDefaults() {
+    const baked = {
+  "studioName": "Creative Studio",
+  "projects": [
+    {
+      "id": "mmi7enuy4pwdeqeeswy",
+      "name": "Sample Short Film",
+      "desc": "A 3-minute animated short exploring isolation.",
+      "category": "Animation",
+      "status": "active",
+      "progress": 45,
+      "due": "2025-09-01",
+      "tools": [
+        "Blender",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "id": "mmi7enuyj7x6c9d0gzs",
+      "name": "Studio Intro Reel",
+      "desc": "Branded intro motion graphics package.",
+      "category": "Motion Graphics",
+      "status": "review",
+      "progress": 80,
+      "due": "2025-06-15",
+      "tools": [
+        "Blender",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "mmi7enuyg51h9aundrl",
+      "title": "Animate a 10-frame walk cycle",
+      "desc": "Use the 12 principles of animation. Focus on weight and timing.",
+      "discipline": "Animation",
+      "difficulty": "Intermediate",
+      "tool": "Blender / Moho",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuyzkzqhw2ta9e",
+      "title": "Color grade a raw clip",
+      "desc": "Import any raw clip into DaVinci Resolve and apply a cinematic LUT.",
+      "discipline": "Film / Video",
+      "difficulty": "Beginner",
+      "tool": "DaVinci Resolve",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuy9fbmgbs8c",
+      "title": "Build a basic 3rd person controller",
+      "desc": "Use Unreal Engine's Blueprint to set up character movement.",
+      "discipline": "Game Dev",
+      "difficulty": "Intermediate",
+      "tool": "Unreal Engine",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuyaqzw373lwqj",
+      "title": "Create a 30-second beat",
+      "desc": "Lay down drums, bass, and a melody in any free DAW.",
+      "discipline": "Music Production",
+      "difficulty": "Beginner",
+      "tool": "LMMS / Audacity",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuy7ibyjbgj9k8",
+      "title": "Model and UV-unwrap a prop",
+      "desc": "Low-poly environmental prop, textured in GIMP or Krita.",
+      "discipline": "3D Art",
+      "difficulty": "Intermediate",
+      "tool": "Blender + GIMP",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuywg6nrm3t4dd",
+      "title": "Illustrate a character turnaround",
+      "desc": "3-view character sheet in Inkscape or Procreate.",
+      "discipline": "Illustration",
+      "difficulty": "Intermediate",
+      "tool": "Inkscape / Procreate",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    }
+  ],
+  "schedule": [
+    {
+      "id": "mmi7enuy430vumfiivn",
+      "title": "Morning Challenge Block",
+      "day": "Monday",
+      "time": "09:00",
+      "notes": "Work on daily animation challenge together."
+    },
+    {
+      "id": "mmi7enuy2d5nf8ta4sx",
+      "title": "Project Sprint Review",
+      "day": "Wednesday",
+      "time": "14:00",
+      "notes": "Review progress on all active projects."
+    },
+    {
+      "id": "mmi7enuydfqooji1vvw",
+      "title": "Free Exploration / Jam",
+      "day": "Friday",
+      "time": "15:00",
+      "notes": "Experiment with new tools and techniques freely."
+    }
+  ],
+  "skills": [
+    {
+      "id": "mmi7enuyy8dxoip4kse",
+      "name": "Blender",
+      "discipline": "3D / Animation",
+      "level": 65
+    },
+    {
+      "id": "mmi7enuylusxuspgm5",
+      "name": "DaVinci Resolve",
+      "discipline": "Film / Video",
+      "level": 70
+    },
+    {
+      "id": "mmi7enuys298n8lul7b",
+      "name": "Unreal Engine",
+      "discipline": "Game Dev",
+      "level": 40
+    },
+    {
+      "id": "mmi7enuya9tmk3h0tof",
+      "name": "Inkscape",
+      "discipline": "Illustration",
+      "level": 55
+    },
+    {
+      "id": "mmi7enuyg6op1jqe23w",
+      "name": "GIMP",
+      "discipline": "Illustration",
+      "level": 60
+    },
+    {
+      "id": "mmi7enuy9whavy82fop",
+      "name": "Moho",
+      "discipline": "3D / Animation",
+      "level": 35
+    },
+    {
+      "id": "mmi7enuyvmgep7lln9c",
+      "name": "Procreate",
+      "discipline": "Illustration",
+      "level": 75
+    },
+    {
+      "id": "mmi7enuyae3wk41a1yf",
+      "name": "LMMS",
+      "discipline": "Music",
+      "level": 30
+    }
+  ],
+  "notes": [
+    {
+      "id": "mmi7enuyhcqkv07s4b9",
+      "title": "GitHub Setup Guide",
+      "category": "Technical Notes",
+      "content": "1. Create a GitHub repo\n2. Upload this HTML file as index.html\n3. Enable GitHub Pages in Settings → Pages\n4. Share the live URL with your team\n\nNote: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.",
+      "date": "2026-03-08"
+    }
+  ],
+  "activity": [
+    {
+      "icon": "🔑",
+      "text": "Studio password updated",
+      "time": "Just now"
+    },
+    {
+      "icon": "🔑",
+      "text": "Studio password updated",
+      "time": "Just now"
+    },
+    {
+      "icon": "🎉",
+      "text": "Studio Hub initialized. Welcome to your creative command center!",
+      "time": "Just now"
+    }
+  ]
+};
+    state = baked;
+    save();
+  }
 
 // ══ UTILS ══
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
@@ -1828,9 +2528,207 @@ function exportHub() {
   const currentPw = getPassword();
 
   const dataScript = `
-  // ══ BAKED-IN DATA (exported ${new Date().toLocaleString()}) ══
+  
+  // ══ BAKED-IN DATA (exported 3/8/2026, 6:25:01 PM) ══
   function seedDefaults() {
-    const baked = ${JSON.stringify(state, null, 2)};
+    const baked = {
+  "studioName": "Creative Studio",
+  "projects": [
+    {
+      "id": "mmi7enuy4pwdeqeeswy",
+      "name": "Sample Short Film",
+      "desc": "A 3-minute animated short exploring isolation.",
+      "category": "Animation",
+      "status": "active",
+      "progress": 45,
+      "due": "2025-09-01",
+      "tools": [
+        "Blender",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "id": "mmi7enuyj7x6c9d0gzs",
+      "name": "Studio Intro Reel",
+      "desc": "Branded intro motion graphics package.",
+      "category": "Motion Graphics",
+      "status": "review",
+      "progress": 80,
+      "due": "2025-06-15",
+      "tools": [
+        "Blender",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "id": "mmi7enuyg51h9aundrl",
+      "title": "Animate a 10-frame walk cycle",
+      "desc": "Use the 12 principles of animation. Focus on weight and timing.",
+      "discipline": "Animation",
+      "difficulty": "Intermediate",
+      "tool": "Blender / Moho",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuyzkzqhw2ta9e",
+      "title": "Color grade a raw clip",
+      "desc": "Import any raw clip into DaVinci Resolve and apply a cinematic LUT.",
+      "discipline": "Film / Video",
+      "difficulty": "Beginner",
+      "tool": "DaVinci Resolve",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuy9fbmgbs8c",
+      "title": "Build a basic 3rd person controller",
+      "desc": "Use Unreal Engine's Blueprint to set up character movement.",
+      "discipline": "Game Dev",
+      "difficulty": "Intermediate",
+      "tool": "Unreal Engine",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuyaqzw373lwqj",
+      "title": "Create a 30-second beat",
+      "desc": "Lay down drums, bass, and a melody in any free DAW.",
+      "discipline": "Music Production",
+      "difficulty": "Beginner",
+      "tool": "LMMS / Audacity",
+      "freq": "Daily",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuy7ibyjbgj9k8",
+      "title": "Model and UV-unwrap a prop",
+      "desc": "Low-poly environmental prop, textured in GIMP or Krita.",
+      "discipline": "3D Art",
+      "difficulty": "Intermediate",
+      "tool": "Blender + GIMP",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    },
+    {
+      "id": "mmi7enuywg6nrm3t4dd",
+      "title": "Illustrate a character turnaround",
+      "desc": "3-view character sheet in Inkscape or Procreate.",
+      "discipline": "Illustration",
+      "difficulty": "Intermediate",
+      "tool": "Inkscape / Procreate",
+      "freq": "Weekly",
+      "done": false,
+      "date": "2026-03-08"
+    }
+  ],
+  "schedule": [
+    {
+      "id": "mmi7enuy430vumfiivn",
+      "title": "Morning Challenge Block",
+      "day": "Monday",
+      "time": "09:00",
+      "notes": "Work on daily animation challenge together."
+    },
+    {
+      "id": "mmi7enuy2d5nf8ta4sx",
+      "title": "Project Sprint Review",
+      "day": "Wednesday",
+      "time": "14:00",
+      "notes": "Review progress on all active projects."
+    },
+    {
+      "id": "mmi7enuydfqooji1vvw",
+      "title": "Free Exploration / Jam",
+      "day": "Friday",
+      "time": "15:00",
+      "notes": "Experiment with new tools and techniques freely."
+    }
+  ],
+  "skills": [
+    {
+      "id": "mmi7enuyy8dxoip4kse",
+      "name": "Blender",
+      "discipline": "3D / Animation",
+      "level": 65
+    },
+    {
+      "id": "mmi7enuylusxuspgm5",
+      "name": "DaVinci Resolve",
+      "discipline": "Film / Video",
+      "level": 70
+    },
+    {
+      "id": "mmi7enuys298n8lul7b",
+      "name": "Unreal Engine",
+      "discipline": "Game Dev",
+      "level": 40
+    },
+    {
+      "id": "mmi7enuya9tmk3h0tof",
+      "name": "Inkscape",
+      "discipline": "Illustration",
+      "level": 55
+    },
+    {
+      "id": "mmi7enuyg6op1jqe23w",
+      "name": "GIMP",
+      "discipline": "Illustration",
+      "level": 60
+    },
+    {
+      "id": "mmi7enuy9whavy82fop",
+      "name": "Moho",
+      "discipline": "3D / Animation",
+      "level": 35
+    },
+    {
+      "id": "mmi7enuyvmgep7lln9c",
+      "name": "Procreate",
+      "discipline": "Illustration",
+      "level": 75
+    },
+    {
+      "id": "mmi7enuyae3wk41a1yf",
+      "name": "LMMS",
+      "discipline": "Music",
+      "level": 30
+    }
+  ],
+  "notes": [
+    {
+      "id": "mmi7enuyhcqkv07s4b9",
+      "title": "GitHub Setup Guide",
+      "category": "Technical Notes",
+      "content": "1. Create a GitHub repo\n2. Upload this HTML file as index.html\n3. Enable GitHub Pages in Settings → Pages\n4. Share the live URL with your team\n\nNote: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.",
+      "date": "2026-03-08"
+    }
+  ],
+  "activity": [
+    {
+      "icon": "🔑",
+      "text": "Studio password updated",
+      "time": "Just now"
+    },
+    {
+      "icon": "🔑",
+      "text": "Studio password updated",
+      "time": "Just now"
+    },
+    {
+      "icon": "🎉",
+      "text": "Studio Hub initialized. Welcome to your creative command center!",
+      "time": "Just now"
+    }
+  ]
+};
     state = baked;
     save();
   }`;
@@ -1845,7 +2743,7 @@ function exportHub() {
 
   // Bake current password into exported file
   exportedSource = exportedSource.replace(
-    /const DEFAULT_PW = '.*?';/,
+    /const DEFAULT_PW = 'LochSquatch';/,
     `const DEFAULT_PW = '${currentPw}';`
   );
 
@@ -1957,5 +2855,6 @@ updateDate();
 render();
 initLockScreen();
 </script>
-</body>
-</html>
+
+
+</body></html>
