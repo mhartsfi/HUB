@@ -914,7 +914,7 @@
     <span>STUDIO HUB</span>
   </div>
   <div style="display:flex;align-items:center;gap:16px">
-    <div class="header-date" id="headerDate">Sunday, March 8, 2026</div>
+    <div class="header-date" id="headerDate">Monday, March 9, 2026</div>
     <button class="btn btn-primary" onclick="exportHub()" style="font-size:12px;padding:7px 16px">⬇ Export HTML</button>
     <button class="btn btn-ghost" onclick="document.getElementById('changePwModal').classList.add('open')" style="font-size:12px;padding:7px 16px">🔑 Password</button>
   </div>
@@ -941,7 +941,7 @@
       <div class="stat-row" id="statRow">
     <div class="stat-pill"><strong>2</strong> Projects</div>
     <div class="stat-pill"><strong>1</strong> Active</div>
-    <div class="stat-pill"><strong>0/6</strong> Challenges Today</div>
+    <div class="stat-pill"><strong>0/0</strong> Challenges Today</div>
     <div class="stat-pill"><strong>8</strong> Skills Tracked</div>
   </div>
     </div>
@@ -1012,6 +1012,14 @@
     <div class="card">
       <div class="card-title"><span class="dot" style="background:var(--accent2)"></span>Recent Activity</div>
       <div id="activityFeed">
+      <div class="activity-item">
+        <div class="activity-icon">🔑</div>
+        <div>
+          <div class="activity-text">Studio password updated</div>
+          <div class="activity-time">Just now</div>
+        </div>
+      </div>
+    
       <div class="activity-item">
         <div class="activity-icon">🔑</div>
         <div>
@@ -1841,6 +1849,11 @@ function load() {
 }
 
 
+  
+  
+  // ══ BAKED-IN DATA (exported 3/8/2026, 6:25:01 PM) ══
+  
+  
   // ══ BAKED-IN DATA (exported 3/8/2026, 6:25:01 PM) ══
   function seedDefaults() {
     const baked = {
@@ -2019,7 +2032,12 @@ function load() {
       "id": "mmi7enuyhcqkv07s4b9",
       "title": "GitHub Setup Guide",
       "category": "Technical Notes",
-      "content": "1. Create a GitHub repo\n2. Upload this HTML file as index.html\n3. Enable GitHub Pages in Settings → Pages\n4. Share the live URL with your team\n\nNote: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.",
+      "content": "1. Create a GitHub repo
+2. Upload this HTML file as index.html
+3. Enable GitHub Pages in Settings → Pages
+4. Share the live URL with your team
+
+Note: Data is stored per-browser with localStorage. For shared cloud data, consider integrating a free Firebase backend.",
       "date": "2026-03-08"
     }
   ],
@@ -2044,20 +2062,6 @@ function load() {
     state = baked;
     save();
   }
-
-// ══ UTILS ══
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-function today() { return new Date().toISOString().slice(0,10); }
-
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-function addActivity(icon, text) {
-  state.activity.unshift({ icon, text, time: 'Just now' });
-  if (state.activity.length > 20) state.activity.pop();
-  save();
-}
 
 // ══ TABS ══
 function showTab(name) {
@@ -2743,7 +2747,7 @@ function exportHub() {
 
   // Bake current password into exported file
   exportedSource = exportedSource.replace(
-    /const DEFAULT_PW = 'LochSquatch';/,
+    /const DEFAULT_PW = 'lochsquatch1';/,
     `const DEFAULT_PW = '${currentPw}';`
   );
 
